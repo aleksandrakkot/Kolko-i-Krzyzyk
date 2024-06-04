@@ -25,7 +25,7 @@ public class TicTacToeGame {
             board[row][col] = currentPlayer;
             return true;
         }
-        return false;
+        throw new IllegalArgumentException("Invalid move");
     }
 
     public boolean checkWinner() {
