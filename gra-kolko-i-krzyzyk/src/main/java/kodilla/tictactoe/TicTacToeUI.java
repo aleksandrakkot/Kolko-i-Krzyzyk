@@ -1,14 +1,17 @@
 package kodilla.tictactoe;
 import java.util.Scanner;
+
+import java.util.Scanner;
+
 public class TicTacToeUI {
     private TicTacToeGame game;
 
-    //constructor
+    // Constructor
     public TicTacToeUI() {
         game = new TicTacToeGame();
     }
 
-    //Gets the current board state from the TicTacToeGame object and print board using "|"
+    // Gets the current board state from the TicTacToeGame object and print board using "|"
     public void printBoard() {
         char[][] board = game.getBoard();
         for (int i = 0; i < 3; i++) {
@@ -52,6 +55,24 @@ public class TicTacToeUI {
                 gameEnded = true;
             } else {
                 game.changePlayer();
+
+                // Ruch komputera, jeśli to jego kolej
+                if (game.getCurrentPlayer() == 'O') {
+                    game.makeComputerMove();
+
+                    // Sprawdzenie, czy komputer wygrał
+                    if (game.checkWinner()) {
+                        printBoard();
+                        System.out.println("Player " + game.getCurrentPlayer() + " wins!");
+                        gameEnded = true;
+                    } else if (game.isBoardFull()) {
+                        printBoard();
+                        System.out.println("The game is a tie!");
+                        gameEnded = true;
+                    } else {
+                        game.changePlayer();
+                    }
+                }
             }
         }
 

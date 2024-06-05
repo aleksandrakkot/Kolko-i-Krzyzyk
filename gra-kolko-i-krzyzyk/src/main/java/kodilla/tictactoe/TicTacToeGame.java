@@ -1,6 +1,8 @@
 package kodilla.tictactoe;
 
 
+import java.util.Random;
+
 public class TicTacToeGame {
     private char[][] board;
     private char currentPlayer;
@@ -71,5 +73,18 @@ public class TicTacToeGame {
 
     public char[][] getBoard() {
         return board;
+    }
+
+    public void makeComputerMove() {
+        if (currentPlayer == 'O') {
+            Random rand = new Random();
+            int row, col;
+            do {
+                row = rand.nextInt(3);
+                col = rand.nextInt(3);
+            } while (board[row][col] != ' ');
+
+            board[row][col] = 'O';
+        }
     }
 }
