@@ -1,17 +1,28 @@
 package kodilla.tictactoe;
 
+import java.util.Random;
 
 import java.util.Random;
 
 public class TicTacToeGame {
     private char[][] board;
     private char currentPlayer;
+    private int size;
+    private int winCondition;
 
-    //constructor - initializes the board as a 3x3 array, where each cell is removed empty and sets the current player to X
-    public TicTacToeGame() {
-        board = new char[3][3];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+    // Constructor - initializes the board with given size and sets the current player to X
+    public TicTacToeGame(int size) {
+        this.size = size;
+
+        if (size == 3) {
+            this.winCondition = 3;
+        } else {
+            this.winCondition = 5;
+        }
+
+        board = new char[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 board[i][j] = ' ';
             }
         }
@@ -23,7 +34,7 @@ public class TicTacToeGame {
     }
 
     public boolean placeMove(int row, int col) {
-        if (row >= 0 && row < 3 && col >= 0 && col < 3 && board[row][col] == ' ') {
+        if (row >= 0 && row < size && col >= 0 && col < size && board[row][col] == ' ') {
             board[row][col] = currentPlayer;
             return true;
         }
@@ -31,34 +42,67 @@ public class TicTacToeGame {
     }
 
     public boolean checkWinner() {
-        // Sprawdzenie wierszy
-        for (int i = 0; i < 3; i++) {
-            if (board[i][0] == currentPlayer && board[i][1] == currentPlayer && board[i][2] == currentPlayer) {
-                return true;
+        // Check rows
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j <= size - winCondition; j++) {
+                boolean win = true;
+                for (int k = 0; k < winCondition; k++) {
+                    if (board[i][j + k] != currentPlayer) {
+                        win = false;
+                        break;
+                    }
+                }
+                if (win) return true;
             }
         }
 
-        // Sprawdzenie kolumn
-        for (int j = 0; j < 3; j++) {
-            if (board[0][j] == currentPlayer && board[1][j] == currentPlayer && board[2][j] == currentPlayer) {
-                return true;
+        // Check columns
+        for (int i = 0; i <= size - winCondition; i++) {
+            for (int j = 0; j < size; j++) {
+                boolean win = true;
+                for (int k = 0; k < winCondition; k++) {
+                    if (board[i + k][j] != currentPlayer) {
+                        win = false;
+                        break;
+                    }
+                }
+                if (win) return true;
             }
         }
 
-        // Sprawdzenie przekątnych
-        if (board[0][0] == currentPlayer && board[1][1] == currentPlayer && board[2][2] == currentPlayer) {
-            return true;
+        // Check diagonals
+        for (int i = 0; i <= size - winCondition; i++) {
+            for (int j = 0; j <= size - winCondition; j++) {
+                boolean win = true;
+                for (int k = 0; k < winCondition; k++) {
+                    if (board[i + k][j + k] != currentPlayer) {
+                        win = false;
+                        break;
+                    }
+                }
+                if (win) return true;
+            }
         }
-        if (board[0][2] == currentPlayer && board[1][1] == currentPlayer && board[2][0] == currentPlayer) {
-            return true;
+
+        for (int i = 0; i <= size - winCondition; i++) {
+            for (int j = winCondition - 1; j < size; j++) {
+                boolean win = true;
+                for (int k = 0; k < winCondition; k++) {
+                    if (board[i + k][j - k] != currentPlayer) {
+                        win = false;
+                        break;
+                    }
+                }
+                if (win) return true;
+            }
         }
 
         return false;
     }
 
     public boolean isBoardFull() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (board[i][j] == ' ') {
                     return false;
                 }
@@ -80,8 +124,8 @@ public class TicTacToeGame {
             Random rand = new Random();
             int row, col;
             do {
-                row = rand.nextInt(3);
-                col = rand.nextInt(3);
+                row = rand.nextInt(size);
+                col = rand.nextInt(size);
             } while (board[row][col] != ' ');
 
             board[row][col] = 'O';
