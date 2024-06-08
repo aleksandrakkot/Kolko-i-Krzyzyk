@@ -1,9 +1,19 @@
 plugins {
-    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
-group = 'org.example'
+javafx {
+    version = "22"
+    modules = [ 'javafx.controls' ]
+}
+
+group = 'kodilla.tictactoe'
 version = '0.0.1-SNAPSHOT'
+
+application {
+    mainClass = 'kodilla.tictactoe.TicTacToeFX'
+}
 
 repositories {
     mavenCentral()

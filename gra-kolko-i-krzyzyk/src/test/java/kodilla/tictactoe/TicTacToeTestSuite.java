@@ -9,7 +9,7 @@ public class TicTacToeTestSuite {
     @Test
     public void testWinOInRow(){
         // Given
-        TicTacToeGame game = new TicTacToeGame();
+        TicTacToeGame game = new TicTacToeGame(3);
         game.changePlayer();
 
         //When
@@ -30,7 +30,7 @@ public class TicTacToeTestSuite {
     @Test
     public void testWinOInColumn(){
         // Given
-        TicTacToeGame game = new TicTacToeGame();
+        TicTacToeGame game = new TicTacToeGame(3);
         game.changePlayer();
 
         //When
@@ -51,7 +51,7 @@ public class TicTacToeTestSuite {
     @Test
     public void testWinOCross(){
         // Given
-        TicTacToeGame game = new TicTacToeGame();
+        TicTacToeGame game = new TicTacToeGame(3);
         game.changePlayer();
 
         //When
@@ -72,7 +72,7 @@ public class TicTacToeTestSuite {
     @Test
     public void testWinXInRow(){
         // Given
-        TicTacToeGame game = new TicTacToeGame();
+        TicTacToeGame game = new TicTacToeGame(3);
 
         //When
         game.placeMove(0, 0);
@@ -92,7 +92,7 @@ public class TicTacToeTestSuite {
     @Test
     public void testWinXInColumn(){
         // Given
-        TicTacToeGame game = new TicTacToeGame();
+        TicTacToeGame game = new TicTacToeGame(3);
 
         //When
         game.placeMove(0, 0);
@@ -112,7 +112,7 @@ public class TicTacToeTestSuite {
     @Test
     public void testWinXCross(){
         // Given
-        TicTacToeGame game = new TicTacToeGame();
+        TicTacToeGame game = new TicTacToeGame(3);
 
         //When
         game.placeMove(0, 0);
@@ -132,7 +132,7 @@ public class TicTacToeTestSuite {
     @Test
     public void testTieGame(){
         // Given
-        TicTacToeGame game = new TicTacToeGame();
+        TicTacToeGame game = new TicTacToeGame(3);
 
         //When
         game.placeMove(0, 0);
@@ -158,7 +158,7 @@ public class TicTacToeTestSuite {
     @Test
     public void testInvalidMove(){
         // Given
-        TicTacToeGame game = new TicTacToeGame();
+        TicTacToeGame game = new TicTacToeGame(3);
         //When
         game.placeMove(0, 0);
         //Then

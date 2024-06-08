@@ -3,10 +3,12 @@ import java.util.Scanner;
 
 public class TicTacToeUI {
     private TicTacToeGame game;
+    private boolean withComputer;
 
     // Constructor
-    public TicTacToeUI(int size) {
+    public TicTacToeUI(int size, boolean withComputer) {
         game = new TicTacToeGame(size);
+        this.withComputer = withComputer;
     }
 
     // Gets the current board state from the TicTacToeGame object and prints board using "|"
@@ -54,8 +56,8 @@ public class TicTacToeUI {
             } else {
                 game.changePlayer();
 
-                // The computer's move if it's his turn
-                if (game.getCurrentPlayer() == 'O') {
+                // The computer's move if it's his turn and game is with computer
+                if (withComputer && game.getCurrentPlayer() == 'O') {
                     game.makeComputerMove();
 
                     //Checking if the computer has won
@@ -80,6 +82,7 @@ public class TicTacToeUI {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
+        boolean withComputer = false;
 
         //Do-while loop for selecting board size
         do {
@@ -102,7 +105,25 @@ public class TicTacToeUI {
             size = 10;
         }
 
-        TicTacToeUI ui = new TicTacToeUI(size);
+        //Do-while loop for selecting opponent type
+        do {
+            System.out.println("Play with computer? 1 for Yes, 2 for No");
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                if (choice != 1 && choice != 2) {
+                    System.out.println("Invalid choice. Please enter 1 or 2.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.next(); // Clear the invalid input
+            }
+        } while (choice != 1 && choice != 2);
+
+        if (choice == 1) {
+            withComputer = true;
+        }
+
+        TicTacToeUI ui = new TicTacToeUI(size, withComputer);
         ui.startGame();
     }
 }
