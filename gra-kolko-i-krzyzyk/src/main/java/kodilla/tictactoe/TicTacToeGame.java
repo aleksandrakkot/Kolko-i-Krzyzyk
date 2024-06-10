@@ -1,141 +1,60 @@
 package kodilla.tictactoe;
 
-import java.util.Random;
-
-import java.util.Random;
-
 public class TicTacToeGame {
-    private char[][] board;
-    private char currentPlayer;
-    private int size;
-    private int winCondition;
+    private TicTacToeBoard board;
+    private TicTacToePlayer currentPlayer;
+    private TicTacToePlayer playerX;
+    private TicTacToePlayer playerO;
+    private TicTacToeGameLogic gameLogic;
+    private boolean withComputer;
 
-    // Constructor - initializes the board with given size and sets the current player to X
     public TicTacToeGame(int size) {
-        this.size = size;
-
-        if (size == 3) {
-            this.winCondition = 3;
-        } else {
-            this.winCondition = 5;
-        }
-
-        board = new char[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                board[i][j] = ' ';
-            }
-        }
-        currentPlayer = 'X';
+        board = new TicTacToeBoard(size);
+        int winCondition = (size == 3) ? 3 : 5;
+        gameLogic = new TicTacToeGameLogic(board.getBoard(), winCondition);
+        playerX = new TicTacToePlayer('X');
+        playerO = new TicTacToePlayer('O');
+        currentPlayer = playerX;
     }
 
-    public char getCurrentPlayer() {
+    public TicTacToePlayer getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public boolean placeMove(int row, int col) {
-        if (row >= 0 && row < size && col >= 0 && col < size) {
-            if (board[row][col] == ' ') {
-                board[row][col] = currentPlayer;
-                return true;
-            } else {
-                System.out.println("Cell at row " + row + ", column " + col + " is not empty.");
-            }
-        } else {
-            System.out.println("Invalid coordinates: row " + row + ", column " + col);
+    public void setWithComputer(boolean withComputer) {
+        this.withComputer = withComputer;
+        if (withComputer) {
+            playerO = new TicTacToeComputerPlayer('O');
         }
-        throw new IllegalArgumentException("Invalid move");
     }
 
+    public boolean isWithComputer() {
+        return withComputer;
+    }
+
+    public boolean placeMove(int row, int col) {
+        return board.placeMove(row, col, currentPlayer.getSymbol());
+    }
 
     public boolean checkWinner() {
-        // Check rows
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j <= size - winCondition; j++) {
-                boolean win = true;
-                for (int k = 0; k < winCondition; k++) {
-                    if (board[i][j + k] != currentPlayer) {
-                        win = false;
-                        break;
-                    }
-                }
-                if (win) return true;
-            }
-        }
-
-        // Check columns
-        for (int i = 0; i <= size - winCondition; i++) {
-            for (int j = 0; j < size; j++) {
-                boolean win = true;
-                for (int k = 0; k < winCondition; k++) {
-                    if (board[i + k][j] != currentPlayer) {
-                        win = false;
-                        break;
-                    }
-                }
-                if (win) return true;
-            }
-        }
-
-        // Check diagonals
-        for (int i = 0; i <= size - winCondition; i++) {
-            for (int j = 0; j <= size - winCondition; j++) {
-                boolean win = true;
-                for (int k = 0; k < winCondition; k++) {
-                    if (board[i + k][j + k] != currentPlayer) {
-                        win = false;
-                        break;
-                    }
-                }
-                if (win) return true;
-            }
-        }
-
-        for (int i = 0; i <= size - winCondition; i++) {
-            for (int j = winCondition - 1; j < size; j++) {
-                boolean win = true;
-                for (int k = 0; k < winCondition; k++) {
-                    if (board[i + k][j - k] != currentPlayer) {
-                        win = false;
-                        break;
-                    }
-                }
-                if (win) return true;
-            }
-        }
-
-        return false;
+        return gameLogic.checkWinner(currentPlayer.getSymbol());
     }
 
     public boolean isBoardFull() {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (board[i][j] == ' ') {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return board.isBoardFull();
     }
 
     public void changePlayer() {
-        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+        currentPlayer = (currentPlayer == playerX) ? playerO : playerX;
     }
 
     public char[][] getBoard() {
-        return board;
+        return board.getBoard();
     }
 
     public void makeComputerMove() {
-        if (currentPlayer == 'O') {
-            Random rand = new Random();
-            int row, col;
-            do {
-                row = rand.nextInt(size);
-                col = rand.nextInt(size);
-            } while (board[row][col] != ' ');
-
-            board[row][col] = 'O';
+        if (currentPlayer instanceof TicTacToeComputerPlayer) {
+            ((TicTacToeComputerPlayer) currentPlayer).makeMove(board);
         }
     }
 }

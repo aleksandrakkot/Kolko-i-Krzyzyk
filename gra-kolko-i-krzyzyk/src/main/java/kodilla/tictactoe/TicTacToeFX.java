@@ -19,6 +19,8 @@ public class TicTacToeFX extends Application {
         boolean withComputer = selectOpponent();
 
         game = new TicTacToeGame(size);
+        game.setWithComputer(withComputer);
+
         buttons = new Button[size][size];
 
         GridPane gridPane = new GridPane();
@@ -29,21 +31,17 @@ public class TicTacToeFX extends Application {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 Button button = new Button();
-                button.setPrefSize(40, 40); // Decreased button size
+                button.setPrefSize(40, 40);
                 button.setOnAction(e -> handleButtonAction(button));
                 buttons[i][j] = button;
                 gridPane.add(button, j, i);
             }
         }
 
-        Scene scene = new Scene(gridPane, 50 + size * 45, 50 + size * 45); // Dynamically set the scene size
+        Scene scene = new Scene(gridPane, 50 + size * 45, 50 + size * 45);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Tic Tac Toe");
         primaryStage.show();
-
-        if (withComputer && game.getCurrentPlayer() == 'O') {
-            game.makeComputerMove();
-        }
     }
 
     private int selectBoardSize() {
@@ -52,7 +50,7 @@ public class TicTacToeFX extends Application {
         Button size3 = new Button("3x3");
         Button size10 = new Button("10x10");
 
-        int[] selectedSize = new int[1]; // Array to hold the selected size value
+        int[] selectedSize = new int[1];
 
         size3.setOnAction(e -> {
             selectedSize[0] = 3;
@@ -85,7 +83,7 @@ public class TicTacToeFX extends Application {
         Button yes = new Button("Yes");
         Button no = new Button("No");
 
-        boolean[] withComputer = new boolean[1]; // Array to hold the selected opponent value
+        boolean[] withComputer = new boolean[1];
 
         yes.setOnAction(e -> {
             withComputer[0] = true;
@@ -114,38 +112,22 @@ public class TicTacToeFX extends Application {
 
     private void handleButtonAction(Button button) {
         if (!game.checkWinner() && !game.isBoardFull()) {
-            int size = game.getBoard().length;
             int row = GridPane.getRowIndex(button);
             int col = GridPane.getColumnIndex(button);
             if (game.getBoard()[row][col] == ' ') {
                 if (game.placeMove(row, col)) {
-                    button.setText(String.valueOf(game.getCurrentPlayer()));
-                    System.out.println("Board state after player move:");
-                    printBoardState(game.getBoard());
+                    button.setText(String.valueOf(game.getCurrentPlayer().getSymbol()));
                     if (game.checkWinner()) {
-                        showAlert("Player " + game.getCurrentPlayer() + " wins!");
+                        showAlert("Player " + game.getCurrentPlayer().getSymbol() + " wins!");
                     } else if (game.isBoardFull()) {
                         showAlert("The game is a tie!");
                     } else {
                         game.changePlayer();
-                        System.out.println("Player changed to: " + game.getCurrentPlayer());
-                        if (game.getCurrentPlayer() == 'O') {
-                            System.out.println("Computer's turn");
+                        if (game.isWithComputer() && game.getCurrentPlayer().getSymbol() == 'O') {
                             game.makeComputerMove();
-                            System.out.println("Board state after computer move:");
-                            printBoardState(game.getBoard());
-
-                            // Update button texts after computer move
-                            for (int i = 0; i < size; i++) {
-                                for (int j = 0; j < size; j++) {
-                                    if (game.getBoard()[i][j] != ' ' && buttons[i][j].getText().isEmpty()) {
-                                        buttons[i][j].setText(String.valueOf(game.getBoard()[i][j]));
-                                    }
-                                }
-                            }
-
+                            updateBoard();
                             if (game.checkWinner()) {
-                                showAlert("Player " + game.getCurrentPlayer() + " wins!");
+                                showAlert("Player " + game.getCurrentPlayer().getSymbol() + " wins!");
                             } else if (game.isBoardFull()) {
                                 showAlert("The game is a tie!");
                             } else {
@@ -160,12 +142,14 @@ public class TicTacToeFX extends Application {
         }
     }
 
-    private void printBoardState(char[][] board) {
+    private void updateBoard() {
+        char[][] board = game.getBoard();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                System.out.print(board[i][j] + " ");
+                if (board[i][j] != ' ' && buttons[i][j].getText().isEmpty()) {
+                    buttons[i][j].setText(String.valueOf(board[i][j]));
+                }
             }
-            System.out.println();
         }
     }
 

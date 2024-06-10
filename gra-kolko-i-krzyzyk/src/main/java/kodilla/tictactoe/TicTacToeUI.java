@@ -1,17 +1,17 @@
 package kodilla.tictactoe;
+
 import java.util.Scanner;
 
 public class TicTacToeUI {
     private TicTacToeGame game;
     private boolean withComputer;
 
-    // Constructor
     public TicTacToeUI(int size, boolean withComputer) {
         game = new TicTacToeGame(size);
+        game.setWithComputer(withComputer);
         this.withComputer = withComputer;
     }
 
-    // Gets the current board state from the TicTacToeGame object and prints board using "|"
     public void printBoard() {
         char[][] board = game.getBoard();
         for (int i = 0; i < board.length; i++) {
@@ -31,9 +31,8 @@ public class TicTacToeUI {
             printBoard();
             int row, col;
 
-            // Taking move from the player
             while (true) {
-                System.out.println("Player " + game.getCurrentPlayer() + ", enter your move (row [1-" + game.getBoard().length + "] and column [1-" + game.getBoard()[0].length + "]): ");
+                System.out.println("Player " + game.getCurrentPlayer().getSymbol() + ", enter your move (row [1-" + game.getBoard().length + "] and column [1-" + game.getBoard()[0].length + "]): ");
                 row = scanner.nextInt() - 1;
                 col = scanner.nextInt() - 1;
 
@@ -44,10 +43,9 @@ public class TicTacToeUI {
                 }
             }
 
-            // Checking if the current player has won
             if (game.checkWinner()) {
                 printBoard();
-                System.out.println("Player " + game.getCurrentPlayer() + " wins!");
+                System.out.println("Player " + game.getCurrentPlayer().getSymbol() + " wins!");
                 gameEnded = true;
             } else if (game.isBoardFull()) {
                 printBoard();
@@ -56,14 +54,12 @@ public class TicTacToeUI {
             } else {
                 game.changePlayer();
 
-                // The computer's move if it's his turn and game is with computer
-                if (withComputer && game.getCurrentPlayer() == 'O') {
+                if (withComputer && game.getCurrentPlayer().getSymbol() == 'O') {
                     game.makeComputerMove();
 
-                    //Checking if the computer has won
                     if (game.checkWinner()) {
                         printBoard();
-                        System.out.println("Player " + game.getCurrentPlayer() + " wins!");
+                        System.out.println("Player " + game.getCurrentPlayer().getSymbol() + " wins!");
                         gameEnded = true;
                     } else if (game.isBoardFull()) {
                         printBoard();
@@ -84,7 +80,6 @@ public class TicTacToeUI {
         int choice = 0;
         boolean withComputer = false;
 
-        //Do-while loop for selecting board size
         do {
             System.out.println("Choose game type: 1 for 3x3, 2 for 10x10");
             if (scanner.hasNextInt()) {
@@ -105,7 +100,6 @@ public class TicTacToeUI {
             size = 10;
         }
 
-        //Do-while loop for selecting opponent type
         do {
             System.out.println("Play with computer? 1 for Yes, 2 for No");
             if (scanner.hasNextInt()) {
