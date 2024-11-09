@@ -7,6 +7,7 @@ To repozytorium zawiera implementację klasycznej gry "Kółko i Krzyżyk" (ang.
 ## Funkcjonalności
 
 - **Tryb gry**: Gra dla dwóch graczy (człowiek z człowiekiem lub człowiek z komputerem).
+- **Plansza**: Możliwosc wyboru planszy 3x3 lub 10x10
 - **Interfejs użytkownika**:
   - **Konsolowy**: Tekstowy interfejs użytkownika.
   - **Graficzny**: Nowoczesny interfejs użytkownika zbudowany przy użyciu JavaFX.
